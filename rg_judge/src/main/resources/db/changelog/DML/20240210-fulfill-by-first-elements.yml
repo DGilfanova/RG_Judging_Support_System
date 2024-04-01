@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: '2'
+      author: Gilfanova Diana
+      changes:
+        - sqlFile:
+            dbms: postgresql
+            splitStatements: true
+            stripComments: true
+            path: SQL/20240210-fulfill-by-first-elements.sql
+            relativeToChangelogFile: true
+            encoding: UTF8

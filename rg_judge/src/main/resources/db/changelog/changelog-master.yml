@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: DDL/20240201-init-db.yml
+      relativeToChangelogFile: true
+  - include:
+      file: DML/20240210-fulfill-by-first-elements.yml
+      relativeToChangelogFile: true

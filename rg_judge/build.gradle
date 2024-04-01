@@ -1,0 +1,71 @@
+plugins {
+	id "java"
+	alias(libs.plugins.spring.boot)
+}
+
+group = "ru.itis"
+version = '1.0.0'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+jar.enabled = false
+
+compileJava {
+	options.compilerArgs << "-Xlint:all,-serial,-processing" //<< "-Werror"
+}
+
+springBoot {
+	buildInfo() {
+		excludes = ['group', 'name']
+	}
+}
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+dependencies {
+	implementation(enforcedPlatform(libs.spring.boot.bom)) {
+		exclude(group: "org.jooq", module: "jooq")
+	}
+	implementation platform(libs.spring.cloud.bom)
+
+	annotationProcessor(libs.mapstruct.processor)
+	annotationProcessor(libs.spring.boot.configuration.processor)
+	annotationProcessor(libs.lombok)
+
+	implementation(libs.liquibase)
+	implementation(libs.jooq)
+	runtimeOnly(libs.postgresql)
+
+	implementation(libs.spring.tx)
+	implementation(libs.spring.boot.starter.actuator)
+	implementation(libs.spring.boot.starter.web)
+	implementation(libs.spring.boot.starter.cache)
+	implementation(libs.spring.boot.starter.validation)
+	implementation(libs.spring.boot.starter.aop)
+	implementation(libs.spring.boot.starter.jooq)
+	implementation(libs.spring.cloud.starter.openfeign)
+	implementation(libs.spring.boot.starter.thymeleaf)
+	implementation(libs.feign.micrometer)
+	implementation(libs.feign.okhttp)
+
+	implementation(libs.springdoc.openapi.ui)
+
+	implementation(libs.mapstruct.impl)
+	implementation(libs.apache.http.client)
+	compileOnly(libs.lombok)
+
+	testImplementation(libs.mapstruct.impl)
+	testImplementation(libs.jackson.datatype.jsr310)
+
+	testImplementation(libs.spring.boot.starter.test)
+}
+
+test {
+	useJUnitPlatform()
+}

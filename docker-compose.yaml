@@ -1,0 +1,84 @@
+version: '3'
+
+services:
+  rg-judge:
+    container_name: rg_judge_service
+    build:
+      context: ./rg_judge
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      ENV: dev
+    depends_on:
+      - rg-judge-db
+      - pose-estimator
+    networks:
+      - rg-judge-network
+
+  pose-estimator:
+    container_name: pose-estimator
+    build:
+      context: ./pose_estimator
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      MINIO_USERNAME: minio_user
+      MINIO_PASSWORD: minio_password
+    depends_on:
+      - minio
+    networks:
+      - rg-judge-network
+
+  minio:
+    container_name: minio
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_storage:/data
+    environment:
+      MINIO_ROOT_USER: minio_user
+      MINIO_ROOT_PASSWORD: minio_password
+    command: server --console-address ":9001" /data
+    networks:
+      - rg-judge-network
+
+  createbucket:
+    image: minio/mc
+    depends_on:
+      - minio
+    networks:
+      - rg-judge-network
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:9000 minio_user minio_password;
+      /usr/bin/mc mb myminio/poses-video;
+      /usr/bin/mc anonymous set public myminio/poses-video;
+      exit 0;
+      "
+
+  rg-judge-db:
+    container_name: rg-judge-db
+    image: postgres:12-alpine
+    restart: on-failure
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: rg_judge
+    networks:
+      - rg-judge-network
+
+networks:
+  rg-judge-network:
+    driver: bridge
+
+volumes:
+  minio_storage: {}

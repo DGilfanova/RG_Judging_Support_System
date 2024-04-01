@@ -1,0 +1,5 @@
+Django~=4.2.10
+djangorestframework~=3.14.0
+opencv-python~=4.9.0.80
+mediapipe
+minio

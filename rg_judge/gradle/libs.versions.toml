@@ -1,0 +1,40 @@
+[versions]
+spring-boot = "3.1.0"
+spring-cloud = "2022.0.2"
+jooq = "3.17.5"
+mapstruct = "1.5.1.Final"
+testcontainers = "1.18.3"
+springdoc-openapi-ui = "2.2.0"
+apache-http-client = "5.2.1"
+lombok = "1.18.30"
+
+[libraries]
+spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
+spring-cloud-bom = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "spring-cloud" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
+mapstruct-impl = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "spring-boot" }
+spring-tx = { module = "org.springframework:spring-tx" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-cache = { module = "org.springframework.boot:spring-boot-starter-cache" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop" }
+spring-boot-starter-jooq = { module = "org.springframework.boot:spring-boot-starter-jooq" }
+spring-cloud-starter-openfeign = { module = "org.springframework.cloud:spring-cloud-starter-openfeign" }
+spring-boot-starter-thymeleaf = { module = "org.springframework.boot:spring-boot-starter-thymeleaf" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+springdoc-openapi-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi-ui" }
+apache-http-client = { module = "org.apache.httpcomponents.client5:httpclient5", version.ref = "apache-http-client" }
+jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+
+liquibase = { module = "org.liquibase:liquibase-core" }
+postgresql = { module = "org.postgresql:postgresql" }
+jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
+
+feign-micrometer = { module = "io.github.openfeign:feign-micrometer" }
+feign-okhttp = { module = "io.github.openfeign:feign-okhttp" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

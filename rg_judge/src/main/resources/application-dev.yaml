@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${PG_MASTER_HOST:rg-judge-db}:${PG_MASTER_PORT:5432}/${PG_DB_NAME:rg_judge}
+    username: ${PG_USERNAME:postgres}
+    password: ${PG_PASSWORD:password}
+  liquibase:
+    enabled: ${LIQUIBASE_ENABLED:true}
+
+integration:
+  pose-estimator:
+    url: ${POSE_ESTIMATOR_SERVICE_URL:http://pose-estimator:8000/}

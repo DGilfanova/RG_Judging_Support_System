@@ -1,0 +1,59 @@
+spring:
+  profiles:
+    default: ${ENV:local}
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
+      client:
+        config:
+          default:
+            logger-level: FULL
+          poseEstimatorServiceClient:
+            connectTimeout: ${POSE_ESTIMATOR_CONNECT_TIMEOUT:10000}
+            readTimeout: ${POSE_ESTIMATOR_READ_TIMEOUT:5400000}
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${PG_MASTER_HOST}:${PG_MASTER_PORT}/${PG_DB_NAME}
+    username: ${PG_USERNAME}
+    password: ${PG_PASSWORD}
+  liquibase:
+    changeLog: classpath:/db/changelog/changelog-master.yml
+    enabled: ${LIQUIBASE_ENABLED}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  api-docs:
+    enabled: true
+
+integration:
+  pose-estimator:
+    url: ${POSE_ESTIMATOR_SERVICE_URL}
+
+logging:
+  level:
+    ru.itis.rgjudge.client: DEBUG
+    ru.itis: INFO
+
+video:
+  max-size: ${VIDEO_FILE_MAX_SIZE:50}      # in MB
+
+rules:
+  balance_fixation_duration: 0.3
+
+penalty:
+  standard_deviation:
+    small_deviation: 10.0
+    large_deviation: 20.0
+    less_than_small_deviation: 0.1
+    less_than_large_deviation: 0.3
+    more_than_large_deviation: 0.5
+  bent_body_part: 0.1
+  not_releve: 0.1
+  fall_from_releve: 0.3
