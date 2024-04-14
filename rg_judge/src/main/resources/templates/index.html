@@ -4,208 +4,272 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <style>
+        .table-bordered, .table-bordered td, .table-bordered th {
+            border-color: #b5b5b5;
+        }
+        .btn-margin {
+            margin: 5px;
+        }
+        .btn-custom {
+            width: 150px;
+            height: 40px;
+            font-size: 16px;
+        }
+        .spinner-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn-light {
+            background-color: #e9ecef;
+            border-color: #e9ecef;
+            color: #212529;
+        }
+        .btn-dark {
+            background-color: rgba(52, 58, 64, 0.8);
+            border-color: rgba(52, 58, 64, 0.8);
+            color: #fff;
+        }
+    </style>
 </head>
-    <body>
-        <div class="container">
-            <h1><br>RG Judging Support System</h1>
-            <p>Выберите элемент, загрузите видео, и система оценит его по правилам художественной гимнастики<br></p>
-        </div>
+<body>
+<div class="container">
+    <h1><br>RG Judging Support System<br></h1>
+    <p>Выберите элемент, загрузите видео, и система оценит его по правилам художественной гимнастики<br><br></p>
+</div>
 
-        <div class="container">
-            <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                    Выберите элемент
-                </a>
+<div class="container">
+    <div class="dropdown">
+        <a class="btn btn-dark dropdown-toggle btn-margin" href="#" role="button" id="dropdownMenuLink"
+           data-bs-toggle="dropdown" aria-expanded="false">
+            Выберите элемент
+        </a>
 
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-<!--                    Здесь будут элементы-->
-                </ul>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <!--                    Здесь будут элементы-->
+        </ul>
+
+        <input type="file" id="videoFile" accept="video/*" style="display:none">
+        <button class="btn btn-secondary btn-margin" id="uploadButton">Загрузите видео</button>
+        <button class="btn btn-primary btn-custom btn-margin" id="sendButton" disabled>Оценить</button>
+    </div>
+    <br><br>
+
+    <div class="container">
+        <div class="row">
+            <hr>
+            <div id="loadingSpinner" class="spinner-border text-primary spinner-container" role="status" style="display: none;"></div>
+            <div class="col-lg-6 col-md-6 col-xs-12">
+                <div id="elementTable">
+                    <!--                    Тут будет результат оценки элемента-->
+                </div>
             </div>
-            <br>
-            <input type="file" id="videoFile" accept="video/*" style="display:none">
-            <button class="btn btn-primary" id="uploadButton">Загрузите видео</button>
-            <button class="btn btn-primary" id="sendButton" disabled>Оценить</button>
-            <div id="loadingSpinner" class="spinner-border text-primary" role="status" style="display: none;">
-                <span class="sr-only">Loading...</span>
+
+            <div class="col-lg-6 col-md-6 col-xs-12">
+                <div class="text-center" id="video">
+                    <!--                    Тут будет видео-->
+                </div>
             </div>
-            <br><br>
 
-            <table class="table table-bordered" id="element_table">
-                <thead>
-                <tr>
-                    <th class="table-active" scope="col">Элемент</th>
-                    <th class="table-active" scope="col">Стоимость</th>
-                    <th class="table-active" scope="col">Засчитан</th>
-                    <th class="table-active" scope="col">Сбавки</th>
-                    <th class="table-active" scope="col">Итоговая оценка</th>
-                    <th class="table-active" scope="col">Ссылка на видео</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                   <!--                    Здесь будет информация об элементе-->
-                </tr>
-                </tbody>
-            </table>
-            <br>
-
-            <table class="table table-bordered" id="report_table">
-                <thead class="thead-light">
-                <tr>
-                    <th class="table-active" scope="col">Критерий оценивания</th>
-                    <th class="table-active" scope="col">Ожидаемое поведение</th>
-                    <th class="table-active" scope="col">Действительное поведение</th>
-                    <th class="table-active" scope="col">Сбавки</th>
-                    <th class="table-active" scope="col">Элемент засчитан</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <!--                    Здесь будет подробный отчет по оценке-->
-                </tr>
-                </tbody>
-            </table>
+            <div id="estimatorContainer">
+                <!--                    Тут будет подробный отчет-->
+            </div>
         </div>
+        <br><br><br><br>
+    </div>
+</div>
 
-        <script>
-            $(document).ready(function() {
-                var elementId = null;
-                var videoFile = null;
+<script>
+    $(document).ready(function () {
+        var elementId = null;
+        var videoFile = null;
 
-                $.ajax({
-                    url: 'http://localhost:8080/api/v1/element',
-                    type: 'GET',
-                    success: function(data) {
-                        $('.dropdown-menu').empty();
-                        $.each(data.body, function(index, item) {
-                            var dropdownItem = $('<li>', {
-                                class: 'dropdown-item',
-                                html: '<a>' + item.name + '</a>'
-                            });
-                            dropdownItem.attr('id', item.id);
-                            $('.dropdown-menu').append(dropdownItem);
-                        });
-                    },
-                    error: function() {
-                        console.log('Ошибка при получении данных');
-                    }
-                });
+        $('#uploadButton').addClass('btn-light');
 
-                $('.dropdown-menu').on('click', 'a', function(e) {
-                    e.preventDefault();
-                    elementId = $(this).parent().attr('id');
-                    selectedText = $(this).text();
-                    updateSendButtonState();
-                    $('#dropdownMenuLink').text(selectedText);
-                });
+        $('#videoFile').on('change', function() {
+            if (this.files.length > 0) {
+                $('#uploadButton').removeClass('btn-light').addClass('btn-dark');
+            } else {
+                $('#uploadButton').removeClass('btn-dark').addClass('btn-light');
+            }
+        });
 
-                $('#uploadButton').click(function() {
-                    $('#videoFile').click();
-                });
-
-                $('#videoFile').change(function() {
-                    videoFile = this.files[0];
-                    updateSendButtonState();
-                });
-
-                function updateSendButtonState() {
-                    if (elementId && videoFile) {
-                        $('#sendButton').prop('disabled', false);
-                    } else {
-                        $('#sendButton').prop('disabled', true);
-                    }
-                }
-
-                $('#sendButton').click(function() {
-                    // Показываем кружочек крутящийся
-                    $('#loadingSpinner').show();
-                    $('#sendButton').prop('disabled', true);
-
-                    var formData = new FormData();
-                    formData.append('elementId', elementId);
-                    formData.append('videoFile', videoFile);
-
-                    $.ajax({
-                        url: 'http://localhost:8080/api/v1/element/evaluate',
-                        type: 'POST',
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function(response) {
-                            $('#loadingSpinner').hide();
-                            $('#sendButton').prop('disabled', false);
-                            var body = response.body
-
-                            var elementTableBody = $('#element_table tbody');
-                            elementTableBody.empty();
-
-                            var info = $('<tr>');
-                            info.append($('<td>').text(body.elementName));
-                            info.append($('<td>').text(body.elementScore));
-                            if (body.isValid) {
-                                info.append($('<td>').html('&#10003;'));
-                            } else {
-                                info.append($('<td>').html('&#x2717;'));
-                            }
-                            info.append($('<td>').text(body.penalty));
-                            info.append($('<td>').text(body.finalScore));
-                            info.append($('<td>').append($('<a>', {
-                                href: body.videoLink,
-                                text: body.videoLink
-                            })));
-                            elementTableBody.append(info);
-
-                            var reportTable = $('#report_table tbody');
-                            reportTable.empty();
-
-                            $.each(body.detailedEstimatorReport, function(index, item) {
-                                var row = $('<tr>');
-                                row.append($('<td>').text(item.estimatorName));
-                                row.append($('<td>').text(item.expectedBehavior));
-                                row.append($('<td>').text(item.actualBehavior));
-                                if (item.penalty !== '0') {
-                                    row.append($('<td>', {
-                                        class: 'table-warning',
-                                        text: item.penalty
-                                    }));
-                                } else {
-                                    row.append($('<td>').text('0.0'));
-                                }
-                                if (item.isCounted === 'false') {
-                                    row.append($('<td>', {
-                                        class: 'table-danger',
-                                        html: '&#x2717;'
-                                    }));
-                                } else {
-                                    row.append($('<td>', {
-                                        class: 'table-success',
-                                        html: '&#10003;'
-                                    }));
-                                }
-                                reportTable.append(row);
-                            });
-                        },
-                        error: function() {
-                            $('#loadingSpinner').hide();
-                            $('#sendButton').prop('disabled', false);
-                            console.log('Ошибка при отправке запроса');
-                        },
-                        xhr: function() {
-                            var xhr = new XMLHttpRequest();
-                            xhr.upload.addEventListener('progress', function(e) {
-                                if (e.lengthComputable) {
-                                    var percentComplete = (e.loaded / e.total) * 100;
-                                    console.log(percentComplete + '% uploaded');
-                                }
-                            }, false);
-                            return xhr;
-                        }
+        $.ajax({
+            url: 'http://localhost:8080/api/v1/element',
+            type: 'GET',
+            success: function (data) {
+                $('.dropdown-menu').empty();
+                $.each(data.body, function (index, item) {
+                    var dropdownItem = $('<li>', {
+                        class: 'dropdown-item',
+                        html: '<a>' + item.officialNumber + '. ' + item.name + '</a>'
                     });
+                    dropdownItem.attr('id', item.id);
+                    $('.dropdown-menu').append(dropdownItem);
                 });
-            });
-        </script>
+            },
+            error: function () {
+                console.log('Ошибка при получении данных');
+            }
+        });
 
-        <!-- Bootstrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
+        $('.dropdown-menu').on('click', 'a', function (e) {
+            e.preventDefault();
+            elementId = $(this).parent().attr('id');
+            selectedText = $(this).text();
+            if (selectedText.length > 20) {
+                selectedText = selectedText.substring(0, 20) + '..';
+            }
+            updateSendButtonState();
+            $('#dropdownMenuLink').text(selectedText);
+        });
+
+        $('#uploadButton').click(function () {
+            $('#videoFile').click();
+        });
+
+        $('#videoFile').change(function () {
+            videoFile = this.files[0];
+            updateSendButtonState();
+        });
+
+        function updateSendButtonState() {
+            if (elementId && videoFile) {
+                $('#sendButton').prop('disabled', false);
+            } else {
+                $('#sendButton').prop('disabled', true);
+            }
+        }
+
+        $('#sendButton').click(function () {
+            // Показываем кружочек крутящийся
+            $('#loadingSpinner').show();
+            $('#sendButton').prop('disabled', true);
+
+            var formData = new FormData();
+            formData.append('elementId', elementId);
+            formData.append('videoFile', videoFile);
+
+            $.ajax({
+                url: 'http://localhost:8080/api/v1/element/evaluate',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    $('#loadingSpinner').hide();
+                    $('#sendButton').prop('disabled', false);
+                    var body = response.body
+
+                    // Заполнение таблицы с элементом
+                    var elementTable = $('<table class="table"></table>')
+                    elementTable.html('<h4>Результат оценивания</h4><br>')
+                    var elBody = $('<body></body>');
+                    elBody.append($('<tr></tr>').append($('<td class="table-active"></td>').text('Элемент')).append($('<td></td>').text(body.elementName)))
+                    elBody.append($('<tr></tr>').append($('<td class="table-active"></td>').text('Стоимость')).append($('<td></td>').text(body.elementScore)))
+                    var isValid;
+                    if (body.isValid) {
+                        isValid = '&#10003;';
+                    } else {
+                        isValid = '&#x2717;';
+                    }
+                    elBody.append($('<tr></tr>').append($('<td class="table-active"></td>').text('Засчитан')).append($('<td></td>').html(isValid)))
+                    elBody.append($('<tr></tr>').append($('<td class="table-active"></td>').text('Сбавки')).append($('<td></td>').text(body.penalty)))
+                    elBody.append($('<tr></tr>').append($('<td class="table-active"></td>').text('Итоговая оценка')).append($('<td></td>').text(body.finalScore)))
+                    elementTable.append(elBody);
+                    $('#elementTable').html(elementTable);
+
+                    // Заполнение видео
+                    $('#video').html('<video width="400" height="600" controls><source src="' + body.videoLink + '" type="video/mp4"></video><br>');
+
+                    // Заполнение таблицы с отчетом
+                    var table = $('<table class="table table-bordered"></table>');
+
+                    var thead = $('<thead></thead>');
+                    var headerRow = $('<tr></tr>');
+                    headerRow.append($('<th class="table-active" scope="col"></th>').text('Критерий оценивания'));
+                    headerRow.append($('<th class="table-active" scope="col"></th>').text('Ожидаемое поведение'));
+                    headerRow.append($('<th class="table-active" scope="col"></th>').text('Действительное поведение'));
+                    headerRow.append($('<th class="table-active" scope="col"></th>').text('Сбавки'));
+                    headerRow.append($('<th class="table-active" scope="col"></th>').text('Элемент засчитан'));
+                    thead.append(headerRow);
+                    table.append(thead);
+
+                    var tbody = $('<tbody></tbody>');
+                    $.each(body.detailedEstimatorReport, function (index, item) {
+                        var row = $('<tr>');
+                        row.append($('<td>').text(item.estimatorName));
+                        row.append($('<td>').text(item.expectedBehavior));
+                        row.append($('<td>').text(item.actualBehavior));
+                        if (item.penalty === 'ignore') {
+                            row.append($('<td>', {
+                                class: 'table-active',
+                                html: '&#8211;'
+                            }));
+                        }
+
+                        if (item.penalty !== '0' && item.penalty !== 'ignore') {
+                            row.append($('<td>', {
+                                class: 'table-warning',
+                                text: item.penalty
+                            }));
+                        }
+                        if ((item.penalty === '0')) {
+                            row.append($('<td>').text('0.0'));
+                        }
+
+                        if (item.isCounted === 'ignore') {
+                            row.append($('<td>', {
+                                class: 'table-active',
+                                html: '&#8211;'
+                            }));
+                        }
+
+                        if (item.isCounted === 'false') {
+                            row.append($('<td>', {
+                                class: 'table-danger',
+                                html: '&#x2717;'
+                            }));
+                        }
+                        if (item.isCounted === 'true') {
+                            row.append($('<td>', {
+                                class: 'table-success',
+                                html: '&#10003;'
+                            }));
+                        }
+                        tbody.append(row);
+                    });
+                    table.append(tbody)
+                    $('#estimatorContainer').empty();
+                    $('#estimatorContainer').append('<h4>Подробный отчет</h4><br>').append(table);
+                },
+                error: function () {
+                    $('#loadingSpinner').hide();
+                    $('#sendButton').prop('disabled', false);
+                    console.log('Ошибка при отправке запроса');
+                },
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.upload.addEventListener('progress', function (e) {
+                        if (e.lengthComputable) {
+                            var percentComplete = (e.loaded / e.total) * 100;
+                            console.log(percentComplete + '% uploaded');
+                        }
+                    }, false);
+                    return xhr;
+                }
+            });
+        });
+    });
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

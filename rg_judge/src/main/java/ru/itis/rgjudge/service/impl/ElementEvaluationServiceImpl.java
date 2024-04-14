@@ -9,12 +9,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.itis.rgjudge.config.properties.VideoFileProperties;
+import ru.itis.rgjudge.db.enums.EstimationType;
 import ru.itis.rgjudge.db.repository.ElementRepository;
 import ru.itis.rgjudge.dto.DefaultResponseDto;
 import ru.itis.rgjudge.dto.ElementReport;
 import ru.itis.rgjudge.dto.PoseResponse;
 import ru.itis.rgjudge.dto.enums.BodyPart;
 import ru.itis.rgjudge.dto.internal.EstimatorResponse;
+import ru.itis.rgjudge.dto.internal.ReportData;
 import ru.itis.rgjudge.exception.ElementEvaluationException;
 import ru.itis.rgjudge.exception.ElementNotFoundException;
 import ru.itis.rgjudge.client.PoseEstimatorClient;
@@ -28,8 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.itis.rgjudge.utils.BodyPostureUtils.getBodyPositionType;
+import static ru.itis.rgjudge.utils.Constant.DECIMAL_FORMAT;
 import static ru.itis.rgjudge.utils.Constant.INVALID_VIDEO_FILE_SIZE_ERROR;
 import static ru.itis.rgjudge.utils.Constant.MB_IN_BYTES;
+import static ru.itis.rgjudge.utils.Constant.NO_PENALTY;
 
 @Service
 public class ElementEvaluationServiceImpl implements ElementEvaluationService {
@@ -60,6 +64,7 @@ public class ElementEvaluationServiceImpl implements ElementEvaluationService {
         var element = elementRepository.findByIdFull(elementId)
                         .orElseThrow(() -> new ElementNotFoundException(elementId));
 
+        Thread.sleep(1000);
         validateVideoFile(videoFile);
         logger.info("Start element evaluation process. Start to detect pose for {} video", videoFile.getOriginalFilename());
 
@@ -76,21 +81,55 @@ public class ElementEvaluationServiceImpl implements ElementEvaluationService {
 
             List<EstimatorResponse> estimatorResponses = new ArrayList<>();
             var currentEvalPoseData = poseData.getPoseData();
-            for (Estimator estimator : estimators) {
-                if (estimator.isApplicableToElement(element)) {
-                    logger.info("Start evaluate by {}", estimator.getClass());
-                    var estimatorResponse = estimator.estimateElement(currentEvalPoseData, bodyParts, element, bodyPositionType);
-                    estimatorResponses.add(estimatorResponse);
-                    if (estimatorResponse.isValid() && estimatorResponse.elementExecutionPoseData() != null) {
-                        currentEvalPoseData = estimatorResponse.elementExecutionPoseData();
-                    }
-                    // TODO Если элемент не засчитан на одном из этапов, далее нет необходимости оценивать
-                    if (!estimatorResponse.isValid()) break;
-                }
-            }
-
-            // TODO normal report view
-            return reportService.createReport(element, estimatorResponses, poseData.getVideoLink());
+//            for (Estimator estimator : estimators) {
+//                if (estimator.isApplicableToElement(element)) {
+//                    logger.info("Start evaluate by {}", estimator.getClass());
+//                    var estimatorResponse = estimator.estimateElement(currentEvalPoseData, bodyParts, element, bodyPositionType);
+//                    estimatorResponses.add(estimatorResponse);
+//                    if (estimatorResponse.isValid() && estimatorResponse.elementExecutionPoseData() != null) {
+//                        currentEvalPoseData = estimatorResponse.elementExecutionPoseData();
+//                    }
+//                }
+//            }
+//            return reportService.createReport(element, estimatorResponses, poseData.getVideoLink());
+            return reportService.createReport(element, List.of(
+                EstimatorResponse.builder()
+                    .isValid(true)
+                    .penalty(0.0)
+                    .estimationType(EstimationType.FULL_CHECK)
+                    .reportData(ReportData.builder()
+                        .estimatorName("trf")
+                        .expectedBehavior("jflfglf")
+                        .actualBehavior("dkffod")
+                        .isCounted(Boolean.TRUE.toString())
+                        .penalty(DECIMAL_FORMAT.format(NO_PENALTY))
+                        .build())
+                    .build(),
+                EstimatorResponse.builder()
+                    .isValid(false)
+                    .penalty(0.3)
+                    .estimationType(EstimationType.FULL_CHECK)
+                    .reportData(ReportData.builder()
+                        .estimatorName("trf")
+                        .expectedBehavior("jflfglf")
+                        .actualBehavior("dkffod")
+                        .isCounted(Boolean.FALSE.toString())
+                        .penalty("0.3")
+                        .build())
+                    .build(),
+                EstimatorResponse.builder()
+                    .isValid(true)
+                    .penalty(0.3)
+                    .estimationType(EstimationType.FULL_CHECK)
+                    .reportData(ReportData.builder()
+                        .estimatorName("trf")
+                        .expectedBehavior("jflfglf")
+                        .actualBehavior("dkffod")
+                        .isCounted(Boolean.TRUE.toString())
+                        .penalty("0.3")
+                        .build())
+                    .build()
+                ), "jfjfjf");
         }
     }
 

@@ -2,6 +2,7 @@ import enum
 
 
 class BodyParts(enum.Enum):
+    NOSE = 0
     LEFT_SHOULDER = 11
     RIGHT_SHOULDER = 12
     LEFT_ELBOW = 13

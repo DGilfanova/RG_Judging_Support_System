@@ -9,13 +9,8 @@ import ru.itis.rgjudge.dto.enums.BodyPart;
 import java.util.List;
 import java.util.function.BiPredicate;
 
-import static ru.itis.rgjudge.db.enums.BodyPositionType.CLOSED;
 import static ru.itis.rgjudge.db.enums.BodyPositionType.OPEN;
-import static ru.itis.rgjudge.db.enums.TypeBySupportLeg.BACK;
-import static ru.itis.rgjudge.db.enums.TypeBySupportLeg.FRONT;
-import static ru.itis.rgjudge.db.enums.TypeBySupportLeg.SIDE;
 import static ru.itis.rgjudge.utils.Constant.DEGREES_360;
-import static ru.itis.rgjudge.utils.Constant.DEGREES_45;
 import static ru.itis.rgjudge.utils.Constant.ANGLE_ACCURACY;
 import static ru.itis.rgjudge.utils.Constant.DEGREE_ACCURACY;
 
@@ -116,7 +111,7 @@ public class CoordinateUtils {
     }
 
     // Расстояние между точками c1 и c2
-    public static Double calculateDistance(Coordinate c1, Coordinate c2) {
+    public static Double calculate2DDistance(Coordinate c1, Coordinate c2) {
         double dx = c1.getX() - c2.getX();
         double dy = c1.getY() - c2.getY();
         return Math.sqrt(dx * dx + dy * dy);

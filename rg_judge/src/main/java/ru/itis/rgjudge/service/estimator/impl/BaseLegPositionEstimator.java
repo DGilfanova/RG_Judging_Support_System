@@ -56,7 +56,6 @@ public class BaseLegPositionEstimator {
             var kneeCoordinate = getCoordinate(coordinates, bodyParts, getKnee(side));
             var hipCoordinate = getCoordinate(coordinates, bodyParts, getHip(side));
 
-            // TODO: понизить DEGREE_ACCURACY_ERROR
             curAngle = calculateLegPositionAngle(curAngle, ankleCoordinate, kneeCoordinate, hipCoordinate);
 
             // В зависимости от типа "согнутоности" колена разная обработка
@@ -118,7 +117,7 @@ public class BaseLegPositionEstimator {
                                          Boolean isValid, Side side) {
         var report = ReportData.builder()
             .estimatorName(LEFT.equals(side) ? "Оценка положения левой ноги" : "Оценка положения правой ноги")
-            .isCounted(isValid)
+            .isCounted(isValid.toString())
             .penalty(DECIMAL_FORMAT.format(penalty));
 
         switch (legPositionType) {

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum BodyPart {
+    NOSE,
     LEFT_WRIST,
     RIGHT_WRIST,
     LEFT_ELBOW,

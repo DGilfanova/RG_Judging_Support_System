@@ -29,7 +29,6 @@ import static ru.itis.rgjudge.utils.CoordinateUtils.calculateAngle;
 import static ru.itis.rgjudge.utils.CoordinateUtils.calculateAverage;
 import static ru.itis.rgjudge.utils.CoordinateUtils.getCoordinate;
 
-// TODO упомянуть в доке про обязательный порядок
 @Component
 @Order(2)
 public class BodyPostureEstimator implements Estimator {
@@ -121,7 +120,7 @@ public class BodyPostureEstimator implements Estimator {
     private ReportData prepareReportData(Element element, Double duration, Double penalty, Double angleDif, Boolean isValid) {
         var report = ReportData.builder()
             .estimatorName("Оценка положения корпуса")
-            .isCounted(isValid)
+            .isCounted(isValid.toString())
             .expectedBehavior("Необходимая длительность фиксации положения корпуса (более %d°, но менее %d°) = %s сек".formatted(
                 Math.round(element.bodyPostureCriteria().minDegree()),
                 Math.round(element.bodyPostureCriteria().maxDegree()),

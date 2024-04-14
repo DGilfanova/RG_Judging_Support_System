@@ -134,7 +134,7 @@ public class LegSplitEstimator implements Estimator {
     private ReportData prepareReportData(Element element, Double duration, Double penalty, Double angleDif, Double maxAngle, Boolean isValid) {
         var report = ReportData.builder()
             .estimatorName("Оценка шпагата")
-            .isCounted(isValid)
+            .isCounted(isValid.toString())
             .expectedBehavior("Необходимая длительность фиксации положения ног (более %d°, но менее %d°) = %s сек".formatted(
                 Math.round(element.legDegreeCriteria().minDegree()),
                 Math.round(element.legDegreeCriteria().maxDegree()),

@@ -23,17 +23,15 @@ import static ru.itis.rgjudge.dto.enums.BodyPart.getFootIndex;
 import static ru.itis.rgjudge.dto.enums.BodyPart.getKnee;
 import static ru.itis.rgjudge.utils.Constant.DECIMAL_FORMAT;
 import static ru.itis.rgjudge.utils.Constant.NO_PENALTY;
-import static ru.itis.rgjudge.utils.CoordinateUtils.calculateDistance;
+import static ru.itis.rgjudge.utils.CoordinateUtils.calculate2DDistance;
 import static ru.itis.rgjudge.utils.CoordinateUtils.calculateDistanceFromPointToLine;
 import static ru.itis.rgjudge.utils.CoordinateUtils.getCoordinate;
 
-// TODO - фиксировать длительность захвата
 @Component
 @Order(6)
 public class HandToLegTouchEstimator implements Estimator {
 
     private static final Double CALF_WIDTH_TO_SHIN_LENGTH_PROPORTION = 0.31;
-    private static final Double THIGH_WIDTH_TO_SHIN_LENGTH_PROPORTION = 0.37;
 
     @Override
     public boolean isApplicableToElement(Element element) {
@@ -53,10 +51,8 @@ public class HandToLegTouchEstimator implements Estimator {
             var footCoordinate = getCoordinate(coordinates, bodyParts, getFootIndex(grabbedLegSide));
             var kneeCoordinate = getCoordinate(coordinates, bodyParts, getKnee(grabbedLegSide));
 
-            if (thighWidth == 0.0)
-                thighWidth = CALF_WIDTH_TO_SHIN_LENGTH_PROPORTION * calculateDistance(footCoordinate, kneeCoordinate);
             if (calfWidth == 0.0)
-                calfWidth = THIGH_WIDTH_TO_SHIN_LENGTH_PROPORTION * calculateDistance(footCoordinate, kneeCoordinate);
+                calfWidth = CALF_WIDTH_TO_SHIN_LENGTH_PROPORTION * calculate2DDistance(footCoordinate, kneeCoordinate);
 
             var leftWristCoordinate = getCoordinate(coordinates, bodyParts, LEFT_WRIST);
             var rightWristCoordinate = getCoordinate(coordinates, bodyParts, LEFT_WRIST);
@@ -90,19 +86,19 @@ public class HandToLegTouchEstimator implements Estimator {
     }
 
     // Проверяем, что checkedPoint находится между прямыми, и ее расстояние до голени меньше ее ширины пополам
-    public static boolean isHandInArea(Coordinate ankleCoordinate, Coordinate kneeCoordinate, Coordinate wristCoordinate, Double width) {
+    private boolean isHandInArea(Coordinate ankleCoordinate, Coordinate kneeCoordinate, Coordinate wristCoordinate, Double width) {
         return (isPointAboveLine(ankleCoordinate, kneeCoordinate, wristCoordinate) ^ isPointAboveLine(kneeCoordinate, ankleCoordinate, wristCoordinate))
             && calculateDistanceFromPointToLine(ankleCoordinate, kneeCoordinate, wristCoordinate) <= width / 2;
     }
 
-    public static boolean isForearmInArea(Coordinate ankleCoordinate, Coordinate kneeCoordinate, Coordinate wristCoordinate,
+    private boolean isForearmInArea(Coordinate ankleCoordinate, Coordinate kneeCoordinate, Coordinate wristCoordinate,
                                           Coordinate elbowCoordinate, Double width) {
         return isHandInArea(ankleCoordinate, kneeCoordinate, wristCoordinate, width)
             || isHandInArea(ankleCoordinate, kneeCoordinate, elbowCoordinate, width);
     }
 
     // Вычислить, находится ли точка c3 выше прямой, перпендикулярной прямой (с1;с2) и проходящей через точку с1
-    public static boolean isPointAboveLine(Coordinate c1, Coordinate c2, Coordinate c3) {
+    private boolean isPointAboveLine(Coordinate c1, Coordinate c2, Coordinate c3) {
         double m = -1.0 / ((c2.getY() - c1.getY()) / (c2.getX() - c1.getX()));
         double b = c1.getY() - m * c1.getX();
         return c3.getY() > c3.getX() * m + b;
@@ -111,7 +107,7 @@ public class HandToLegTouchEstimator implements Estimator {
     private ReportData prepareReportData(Element element, Boolean isCorrect) {
         var report = ReportData.builder()
             .estimatorName("Положение рук")
-            .isCounted(isCorrect)
+            .isCounted(isCorrect.toString())
             .expectedBehavior(element.handToLegTouchCriteria().isTouch()
                 ? "Рука должна касаться ноги"
                 : "Рука не должна касаться ноги"

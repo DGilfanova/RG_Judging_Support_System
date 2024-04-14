@@ -45,7 +45,7 @@ public class ReleveEstimator implements Estimator {
 
     @Override
     public boolean isApplicableToElement(Element element) {
-        // TODO после добавления прыжков: если равновесие и не сидячее
+        // UPD: после добавления прыжков: если равновесие и не сидячее
         return element.value() > penaltyScorer.getPenaltyForNotReleve();
     }
 
@@ -92,11 +92,13 @@ public class ReleveEstimator implements Estimator {
         }
 
         var duration = poseData.get(end).getTime() - poseData.get(start).getTime();
-        var isValid = isReleveRegistered && duration - rulesProperties.balanceFixationDuration() > 0;
+        var isValid = true;
+        if (isReleveRegistered) {
+            isValid = duration - rulesProperties.balanceFixationDuration() > 0;
+        }
 
         var penalty = NO_PENALTY;
         if (!isReleveRegistered) penalty = penaltyScorer.getPenaltyForNotReleve();
-        // TODO invalid logic
         if (!isValid) penalty = penaltyScorer.getPenaltyForFallingFromReleve();
 
         return EstimatorResponse.builder()
@@ -128,7 +130,7 @@ public class ReleveEstimator implements Estimator {
 
     private ReportData prepareReportData(Boolean isValid, Boolean isReleveRegistered, Double penalty, Double maxAngle, Double duration) {
         var report = ReportData.builder()
-                .isCounted(Boolean.TRUE)
+                .isCounted(Boolean.TRUE.toString())
                 .expectedBehavior("Длительность фиксации в релеве = %s сек"
                         .formatted(DECIMAL_FORMAT.format(rulesProperties.balanceFixationDuration())))
                 .estimatorName("Оценка релеве");

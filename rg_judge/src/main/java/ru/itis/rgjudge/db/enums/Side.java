@@ -2,5 +2,9 @@ package ru.itis.rgjudge.db.enums;
 
 public enum Side {
     RIGHT,
-    LEFT
+    LEFT;
+
+    public Side getOpposite() {
+        return this.equals(LEFT) ? RIGHT : LEFT;
+    }
 }

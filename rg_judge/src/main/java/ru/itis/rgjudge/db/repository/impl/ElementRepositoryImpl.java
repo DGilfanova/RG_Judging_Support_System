@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import ru.itis.rgjudge.db.enums.EstimationType;
 import ru.itis.rgjudge.db.enums.HandToLegTouchType;
+import ru.itis.rgjudge.db.enums.HeadToLegTouchType;
 import ru.itis.rgjudge.db.enums.LegPositionType;
 import ru.itis.rgjudge.db.enums.TypeBySupportLeg;
 import ru.itis.rgjudge.db.model.Element;
@@ -36,13 +37,18 @@ public class ElementRepositoryImpl implements ElementRepository {
                    rlpc.position_type as right_leg_position_type,
                    rlpc.estimation_type as right_leg_estimation_type,
                    hltc.type as hltc_type,
-                   hltc.is_touch as hltc_is_touch
+                   hltc.is_touch as hltc_is_touch,
+                   hdltc.type as hdltc_type,
+                   hdltc.is_touch as hdltc_is_touch,
+                   lltc.is_touch as lltc_is_touch
             FROM element e
                      LEFT JOIN body_posture_criteria bpc ON e.id = bpc.element_id
                      LEFT JOIN leg_split_criteria ldc ON e.id = ldc.element_id
                      LEFT JOIN leg_position_criteria llpc ON e.id = llpc.element_id AND llpc.side = 'LEFT'
                      LEFT JOIN leg_position_criteria rlpc ON e.id = rlpc.element_id AND rlpc.side = 'RIGHT'
                      LEFT JOIN hand_to_leg_touch_criteria hltc ON e.id = hltc.element_id
+                     LEFT JOIN head_to_leg_touch_criteria hdltc ON e.id = hdltc.element_id
+                     LEFT JOIN leg_to_leg_touch_criteria lltc ON e.id = lltc.element_id
             WHERE id = :id;
             """;
 
@@ -88,6 +94,13 @@ public class ElementRepositoryImpl implements ElementRepository {
                     .handToLegTouchCriteria(Element.HandToLegTouchCriteria.builder()
                             .type(getByName(HandToLegTouchType.class, rs.getString("hltc_type")))
                             .isTouch(rs.getObject("hltc_is_touch", Boolean.class))
+                            .build())
+                    .headToLegTouchCriteria(Element.HeadToLegTouchCriteria.builder()
+                            .type(getByName(HeadToLegTouchType.class, rs.getString("hdltc_type")))
+                            .isTouch(rs.getObject("hdltc_is_touch", Boolean.class))
+                            .build())
+                    .legToLegTouchCriteria(Element.LegToLegTouchCriteria.builder()
+                            .isTouch(rs.getObject("lltc_is_touch", Boolean.class))
                             .build())
                     .build();
 

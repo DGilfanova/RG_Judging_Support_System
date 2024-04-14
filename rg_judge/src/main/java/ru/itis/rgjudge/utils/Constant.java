@@ -18,6 +18,7 @@ public class Constant {
     // Score
     public static final double ZERO_SCORE = 0.0;
     public static final double NO_PENALTY = 0.0;
+    public static final String IGNORE_ESTIMATION = "ignore";
 
     // Format
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
