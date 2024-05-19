@@ -18,4 +18,6 @@ public class ReportData {
     String actualBehavior;
     String penalty;
     String isCounted;
+    Long detectionQuality;
+    Boolean isIgnore;
 }

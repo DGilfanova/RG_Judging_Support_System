@@ -10,8 +10,8 @@ integration:
   pose-estimator:
     url: ${POSE_ESTIMATOR_SERVICE_URL:http://localhost:8000/}
 
-feign:
-  client:
-    config:
-      default:
-        loggerLevel: FULL
+#feign:
+#  client:
+#    config:
+#      default:
+#        loggerLevel: FULL

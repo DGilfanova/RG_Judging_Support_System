@@ -23,9 +23,9 @@ public class BodyPostureUtils {
 
     public static BodyPositionType getBodyPositionType(List<PoseResponse.PoseData> poseData,
                                                              List<BodyPart> bodyParts,
-                                                             TypeBySupportLeg typeBySupportLeg,
-                                                             Integer frameCount) {
-        //После теста определено, что для SIDE логика открытости/закрытости та же, но временно оставляю всегда открое положение
+                                                             TypeBySupportLeg typeBySupportLeg) {
+        int frameCount = poseData.size();
+        //Нельзя выполнять боковые равновесия в закрытом положении
         if (TypeBySupportLeg.SIDE.equals(typeBySupportLeg)) {
             return BodyPositionType.OPEN;
         }

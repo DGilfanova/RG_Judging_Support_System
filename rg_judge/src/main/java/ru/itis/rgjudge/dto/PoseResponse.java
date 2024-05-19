@@ -25,8 +25,8 @@ public class PoseResponse {
     @JsonProperty("width")
     private Integer width;
 
-    @JsonProperty("frame_count")
-    private Integer frameCount;
+    @JsonProperty("fps")
+    private Integer fps;
 
     @JsonProperty("duration")
     private Double duration;

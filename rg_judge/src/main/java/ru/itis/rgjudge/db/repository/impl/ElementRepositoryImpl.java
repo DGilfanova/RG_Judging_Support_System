@@ -53,9 +53,7 @@ public class ElementRepositoryImpl implements ElementRepository {
             """;
 
     private static final String SELECT_ALL_SQL = """
-
-            SELECT * FROM element
-            ORDER BY id;
+            SELECT * FROM element;
             """;
 
     private static final RowMapper<ElementShortInfo> MAPPER = (rs, rowNum) ->

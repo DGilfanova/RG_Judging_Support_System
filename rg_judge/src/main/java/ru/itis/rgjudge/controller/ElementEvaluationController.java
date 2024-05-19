@@ -3,6 +3,7 @@ package ru.itis.rgjudge.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ru.itis.rgjudge.api.ElementEvaluationApi;
+import ru.itis.rgjudge.db.enums.Side;
 import ru.itis.rgjudge.dto.DefaultResponseDto;
 import ru.itis.rgjudge.dto.ElementReport;
 import ru.itis.rgjudge.dto.ElementResponse;
@@ -30,9 +31,9 @@ public class ElementEvaluationController implements ElementEvaluationApi {
     }
 
     @Override
-    public DefaultResponseDto<ElementReport> evaluateElement(Integer elementId, MultipartFile videoFile, MultipartFile gymnastPhoto) {
+    public DefaultResponseDto<ElementReport> evaluateElement(Integer elementId, MultipartFile videoFile, Side handed) {
         return DefaultResponseDto.<ElementReport>builder()
-                .body(elementEvaluationService.evaluateElement(elementId, videoFile, gymnastPhoto))
+                .body(elementEvaluationService.evaluateElement(elementId, videoFile, handed))
                 .build();
     }
 }

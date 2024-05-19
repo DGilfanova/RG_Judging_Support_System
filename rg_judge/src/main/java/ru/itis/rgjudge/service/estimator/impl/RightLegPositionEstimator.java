@@ -9,13 +9,14 @@ import ru.itis.rgjudge.db.model.Element;
 import ru.itis.rgjudge.dto.PoseResponse;
 import ru.itis.rgjudge.dto.enums.BodyPart;
 import ru.itis.rgjudge.dto.internal.EstimatorResponse;
+import ru.itis.rgjudge.dto.internal.FrameInfo;
 import ru.itis.rgjudge.service.PenaltyScorer;
 import ru.itis.rgjudge.service.estimator.Estimator;
 
 import java.util.List;
 
 @Component
-@Order(5)
+@Order(3)
 public class RightLegPositionEstimator extends BaseLegPositionEstimator implements Estimator {
 
     public RightLegPositionEstimator(PenaltyScorer penaltyScorer, RulesProperties rulesProperties) {
@@ -29,7 +30,7 @@ public class RightLegPositionEstimator extends BaseLegPositionEstimator implemen
 
     @Override
     public EstimatorResponse estimateElement(List<PoseResponse.PoseData> poseData, List<BodyPart> bodyParts,
-                                             Element element, BodyPositionType bodyPositionType) {
-        return estimate(poseData, bodyParts, element, Side.RIGHT);
+                                             Element element, BodyPositionType bodyPositionType, FrameInfo frameInfo, Side handed) {
+        return estimate(poseData, bodyParts, element, Side.RIGHT, frameInfo, handed);
     }
 }

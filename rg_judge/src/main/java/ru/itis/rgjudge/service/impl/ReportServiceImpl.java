@@ -10,7 +10,7 @@ import ru.itis.rgjudge.service.ReportService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.itis.rgjudge.utils.Constant.IGNORE_ESTIMATION;
+import static ru.itis.rgjudge.dto.enums.Criteria.RELEVE;
 import static ru.itis.rgjudge.utils.Constant.ZERO_SCORE;
 
 @Service
@@ -23,14 +23,11 @@ public class ReportServiceImpl implements ReportService {
         var detailedReport = new ArrayList<ReportData>();
         for (EstimatorResponse response: estimatorResponses) {
             var estimatorDetailedReport = response.reportData();
-            if (!isValid) {
-                estimatorDetailedReport.setPenalty(IGNORE_ESTIMATION);
-                estimatorDetailedReport.setIsCounted(IGNORE_ESTIMATION);
-            }
+            estimatorDetailedReport.setIsIgnore(!isValid);
             switch (response.estimationType()) {
                 case FULL_CHECK -> {
                     // Сбавка применяется только у критерия, из-за которого элемент не засчитан, более не сбавляем
-                    if (isValid && !response.isValid()) {
+                    if (isValid || (response.isValid() && !RELEVE.equals(response.criteria()))) {
                         penalty += response.penalty();
                     }
                     isValid = isValid && response.isValid();
@@ -45,15 +42,7 @@ public class ReportServiceImpl implements ReportService {
             detailedReport.add(estimatorDetailedReport);
         }
         var finalScore = isValid ? element.value() - penalty : ZERO_SCORE - penalty;
-        System.out.println(ElementReport.builder()
-            .elementName(element.name())
-            .elementScore(element.value())
-            .isValid(isValid)
-            .penalty(penalty)
-            .finalScore(finalScore)
-            .detailedEstimatorReport(detailedReport)
-            .videoLink(videoLink)
-            .build());
+
         return ElementReport.builder()
                 .elementName(element.name())
                 .elementScore(element.value())

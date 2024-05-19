@@ -4,6 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("video")
 public record VideoFileProperties(
-        int maxSize
+        int maxSize,
+        int minFps
 ) {
 }

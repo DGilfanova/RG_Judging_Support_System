@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS element
     updated_at          TIMESTAMP DEFAULT now()
 );
 
+
 CREATE TABLE IF NOT EXISTS leg_split_criteria
 (
     element_id INT UNIQUE,
@@ -18,6 +19,7 @@ CREATE TABLE IF NOT EXISTS leg_split_criteria
     CHECK ( min_degree <= max_degree ),
     FOREIGN KEY (element_id) REFERENCES element (id)
 );
+
 
 CREATE TABLE IF NOT EXISTS body_posture_criteria
 (

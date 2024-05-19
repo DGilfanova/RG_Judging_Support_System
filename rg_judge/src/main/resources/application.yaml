@@ -43,6 +43,7 @@ logging:
 
 video:
   max-size: ${VIDEO_FILE_MAX_SIZE:50}      # in MB
+  min-fps: ${VIDEO_MIN_FPS:30}
 
 rules:
   balance_fixation_duration: 0.3

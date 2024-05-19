@@ -2,9 +2,9 @@ package ru.itis.rgjudge.utils;
 
 import lombok.experimental.UtilityClass;
 import ru.itis.rgjudge.db.enums.BodyPositionType;
-import ru.itis.rgjudge.db.enums.TypeBySupportLeg;
 import ru.itis.rgjudge.dto.PoseResponse.Coordinate;
 import ru.itis.rgjudge.dto.enums.BodyPart;
+import ru.itis.rgjudge.dto.internal.FrameInfo;
 
 import java.util.List;
 import java.util.function.BiPredicate;
@@ -61,7 +61,7 @@ public class CoordinateUtils {
       С передним равновесием наоборот
     */
     public static Double calculateAngle(Coordinate c1, Coordinate c2, Coordinate c3, Double previousAngle,
-                                        BodyPositionType bodyPositionType, TypeBySupportLeg typeBySupportLeg) {
+                                        BodyPositionType bodyPositionType) {
         double angle = calculateAngle(c1, c2, c3);
         return OPEN.equals(bodyPositionType)
                 ? c3.getX() >= c2.getX() && checkNotDataEmission(DEGREES_360 - angle, previousAngle) ? DEGREES_360 - angle : angle
@@ -110,11 +110,19 @@ public class CoordinateUtils {
                 .build();
     }
 
-    // Расстояние между точками c1 и c2
+    // 2D расстояние между точками c1 и c2
     public static Double calculate2DDistance(Coordinate c1, Coordinate c2) {
         double dx = c1.getX() - c2.getX();
         double dy = c1.getY() - c2.getY();
         return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // 3D расстояние между точками c1 и c2
+    public static Double calculate3DDistance(Coordinate c1, Coordinate c2) {
+        double dx = c1.getX() - c2.getX();
+        double dy = c1.getY() - c2.getY();
+        double dz = c1.getZ() - c2.getZ();
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
     // Расстояние от точки c3 до прямой (c1;c2)
@@ -125,5 +133,10 @@ public class CoordinateUtils {
 
     public static Coordinate getCoordinate(List<Coordinate> coordinates, List<BodyPart> bodyParts, BodyPart bodyPart) {
         return coordinates.get(bodyParts.indexOf(bodyPart));
+    }
+
+    public static boolean isCoordinateInFrame(Coordinate coordinate, FrameInfo frameInfo) {
+        return coordinate.getX() > 0 && coordinate.getX() < frameInfo.width()
+            && coordinate.getY() > 0 && coordinate.getY() < frameInfo.height();
     }
 }

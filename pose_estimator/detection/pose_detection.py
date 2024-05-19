@@ -32,18 +32,17 @@ def detect_pose_coordinates(video):
         cap = cv2.VideoCapture(saved_video_path)
 
         fps = cap.get(cv2.CAP_PROP_FPS)
-        frame_counts = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        duration = round(frame_counts / fps if fps > 0 else 0, 5)
         height = int(cap.get(3))
         width = int(cap.get(4))
         logger.info(f'Start to detect pose for {saved_video_path}. '
-                    f'Video params: duration = {duration}, frames = {frame_counts}, height = {height}, width = {width}')
+                    f'Video params: fps = {fps}, height = {height}, width = {width}')
 
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         out = cv2.VideoWriter(video_name, fourcc, fps, (height, width))
 
         pose_data = []
         frame_count = 0
+        time = 0
         while cap.isOpened():
             ret, frame = cap.read()
             frame_count += 1
@@ -89,8 +88,8 @@ def detect_pose_coordinates(video):
             "pose_data": pose_data,
             "height": height,
             "width": width,
-            "frame_count": frame_counts,
-            "duration": duration,
+            "fps": fps,
+            "duration": time,
             "video_link": f'{settings.MINIO_USER_URL}/{settings.MINIO_VIDEO_BUCKET_NAME}/{video_name}',
             "body_parts": [member.name for member in BodyParts]
         }

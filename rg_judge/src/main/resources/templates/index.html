@@ -59,7 +59,10 @@
         <button class="btn btn-secondary btn-margin" id="uploadButton">Загрузите видео</button>
         <button class="btn btn-primary btn-custom btn-margin" id="sendButton" disabled>Оценить</button>
     </div>
-    <br><br>
+    <br>
+    <div id="errorBlock" style="color: red;">
+    </div>
+    <br>
 
     <div class="container">
         <div class="row">
@@ -151,6 +154,7 @@
             // Показываем кружочек крутящийся
             $('#loadingSpinner').show();
             $('#sendButton').prop('disabled', true);
+            $('#errorBlock').hide().empty();
 
             var formData = new FormData();
             formData.append('elementId', elementId);
@@ -198,6 +202,7 @@
                     headerRow.append($('<th class="table-active" scope="col"></th>').text('Действительное поведение'));
                     headerRow.append($('<th class="table-active" scope="col"></th>').text('Сбавки'));
                     headerRow.append($('<th class="table-active" scope="col"></th>').text('Элемент засчитан'));
+                    headerRow.append($('<th class="table-active" scope="col"></th>', { style: 'text-align: center;' }).text('Достоверность'));
                     thead.append(headerRow);
                     table.append(thead);
 
@@ -207,52 +212,67 @@
                         row.append($('<td>').text(item.estimatorName));
                         row.append($('<td>').text(item.expectedBehavior));
                         row.append($('<td>').text(item.actualBehavior));
-                        if (item.penalty === 'ignore') {
-                            row.append($('<td>', {
-                                class: 'table-active',
-                                html: '&#8211;'
-                            }));
+
+                        if (item.isIgnore) {
+                            if (item.penalty !== '0') {
+                                row.append($('<td>', {
+                                    class: 'table-active',
+                                    text: item.penalty
+                                }));
+                            } else {
+                                row.append($('<td>', {
+                                    class: 'table-active',
+                                    text: '0.0'
+                                }));
+                            }
+                        } else {
+                            if (item.penalty !== '0') {
+                                row.append($('<td>', {
+                                    class: 'table-warning',
+                                    text: item.penalty
+                                }));
+                            } else {
+                                row.append($('<td>').text('0.0'));
+                            }
                         }
 
-                        if (item.penalty !== '0' && item.penalty !== 'ignore') {
-                            row.append($('<td>', {
-                                class: 'table-warning',
-                                text: item.penalty
-                            }));
-                        }
-                        if ((item.penalty === '0')) {
-                            row.append($('<td>').text('0.0'));
+                        if (item.isIgnore) {
+                            if (item.isCounted === 'false') {
+                                row.append($('<td>', {
+                                    class: 'table-active',
+                                    html: '&#x2717;'
+                                }));
+                            } else {
+                                row.append($('<td>', {
+                                    class: 'table-active',
+                                    html: '&#10003;'
+                                }));
+                            }
+                        } else {
+                            if (item.isCounted === 'false') {
+                                row.append($('<td>', {
+                                    class: 'table-danger',
+                                    html: '&#x2717;'
+                                }));
+                            } else {
+                                row.append($('<td>', {
+                                    class: 'table-success',
+                                    html: '&#10003;'
+                                }));
+                            }
                         }
 
-                        if (item.isCounted === 'ignore') {
-                            row.append($('<td>', {
-                                class: 'table-active',
-                                html: '&#8211;'
-                            }));
-                        }
-
-                        if (item.isCounted === 'false') {
-                            row.append($('<td>', {
-                                class: 'table-danger',
-                                html: '&#x2717;'
-                            }));
-                        }
-                        if (item.isCounted === 'true') {
-                            row.append($('<td>', {
-                                class: 'table-success',
-                                html: '&#10003;'
-                            }));
-                        }
+                        row.append($('<td>', { style: 'text-align: center;' }).text(item.detectionQuality + '%'));
                         tbody.append(row);
                     });
                     table.append(tbody)
                     $('#estimatorContainer').empty();
                     $('#estimatorContainer').append('<h4>Подробный отчет</h4><br>').append(table);
                 },
-                error: function () {
+                error: function (xhr, status, error) {
                     $('#loadingSpinner').hide();
                     $('#sendButton').prop('disabled', false);
-                    console.log('Ошибка при отправке запроса');
+                    $('#errorBlock').text(JSON.parse(xhr.responseText).error).show();
                 },
                 xhr: function () {
                     var xhr = new XMLHttpRequest();

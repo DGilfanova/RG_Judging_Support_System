@@ -9,6 +9,7 @@ import ru.itis.rgjudge.db.model.Element;
 import ru.itis.rgjudge.dto.PoseResponse;
 import ru.itis.rgjudge.dto.enums.BodyPart;
 import ru.itis.rgjudge.dto.internal.EstimatorResponse;
+import ru.itis.rgjudge.dto.internal.FrameInfo;
 import ru.itis.rgjudge.service.PenaltyScorer;
 import ru.itis.rgjudge.service.estimator.Estimator;
 
@@ -29,7 +30,7 @@ public class LeftLegPositionEstimator extends BaseLegPositionEstimator implement
 
     @Override
     public EstimatorResponse estimateElement(List<PoseResponse.PoseData> poseData, List<BodyPart> bodyParts,
-                                             Element element, BodyPositionType bodyPositionType) {
-        return estimate(poseData, bodyParts, element, Side.LEFT);
+                                             Element element, BodyPositionType bodyPositionType, FrameInfo frameInfo, Side handed) {
+        return estimate(poseData, bodyParts, element, Side.LEFT, frameInfo, handed);
     }
 }

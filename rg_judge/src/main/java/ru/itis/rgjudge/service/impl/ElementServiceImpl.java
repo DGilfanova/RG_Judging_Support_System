@@ -6,6 +6,7 @@ import ru.itis.rgjudge.dto.ElementResponse;
 import ru.itis.rgjudge.mapper.ElementMapper;
 import ru.itis.rgjudge.service.ElementService;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -21,6 +22,9 @@ public class ElementServiceImpl implements ElementService {
 
     @Override
     public List<ElementResponse> getAllElements() {
-        return mapper.toResponseList(elementRepository.getAll());
+        var sortedElements = elementRepository.getAll().stream()
+            .sorted(Comparator.comparingDouble(o -> Double.parseDouble(o.officialNumber())))
+            .toList();
+        return mapper.toResponseList(sortedElements);
     }
 }
