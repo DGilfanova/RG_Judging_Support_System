@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS element
     name                VARCHAR    NOT NULL,
     value               REAL       NOT NULL,
     type_by_support_leg VARCHAR(5) NOT NULL,
+    type_by_execution   VARCHAR(15) NOT NULL,
     created_at          TIMESTAMP DEFAULT now(),
     updated_at          TIMESTAMP DEFAULT now()
 );
@@ -46,37 +47,37 @@ CREATE TABLE IF NOT EXISTS leg_position_criteria
 
 CREATE TABLE IF NOT EXISTS releve_criteria
 (
-    element_id      INT PRIMARY KEY,
-    is_releve       BOOLEAN,
-    added_at        TIMESTAMP DEFAULT now(),
+    element_id INT PRIMARY KEY,
+    is_releve  BOOLEAN,
+    added_at   TIMESTAMP DEFAULT now(),
     FOREIGN KEY (element_id) REFERENCES element (id)
 );
 
 
 CREATE TABLE IF NOT EXISTS hand_to_leg_touch_criteria
 (
-    element_id      INT PRIMARY KEY,
-    type            VARCHAR(30),
-    is_touch        BOOLEAN,
-    added_at        TIMESTAMP DEFAULT now(),
+    element_id INT PRIMARY KEY,
+    type       VARCHAR(30),
+    is_touch   BOOLEAN,
+    added_at   TIMESTAMP DEFAULT now(),
     FOREIGN KEY (element_id) REFERENCES element (id)
 );
 
 
 CREATE TABLE IF NOT EXISTS head_to_leg_touch_criteria
 (
-    element_id      INT PRIMARY KEY,
-    type            VARCHAR(30),
-    is_touch        BOOLEAN,
-    added_at        TIMESTAMP DEFAULT now(),
+    element_id INT PRIMARY KEY,
+    type       VARCHAR(30),
+    is_touch   BOOLEAN,
+    added_at   TIMESTAMP DEFAULT now(),
     FOREIGN KEY (element_id) REFERENCES element (id)
 );
 
 
 CREATE TABLE IF NOT EXISTS leg_to_leg_touch_criteria
 (
-    element_id      INT PRIMARY KEY,
-    is_touch        BOOLEAN,
-    added_at        TIMESTAMP DEFAULT now(),
+    element_id INT PRIMARY KEY,
+    is_touch   BOOLEAN,
+    added_at   TIMESTAMP DEFAULT now(),
     FOREIGN KEY (element_id) REFERENCES element (id)
 );

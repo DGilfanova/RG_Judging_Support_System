@@ -5,6 +5,7 @@ import ru.itis.rgjudge.db.enums.EstimationType;
 import ru.itis.rgjudge.db.enums.HandToLegTouchType;
 import ru.itis.rgjudge.db.enums.HeadToLegTouchType;
 import ru.itis.rgjudge.db.enums.LegPositionType;
+import ru.itis.rgjudge.db.enums.TypeByExecution;
 import ru.itis.rgjudge.db.enums.TypeBySupportLeg;
 
 @Builder
@@ -13,6 +14,7 @@ public record Element(
     String name,
     Double value,
     TypeBySupportLeg typeBySupportLeg,
+    TypeByExecution typeByExecution,
     BodyPostureCriteria bodyPostureCriteria,
     LegDegreeCriteria legDegreeCriteria,
     LeftLegPositionCriteria leftLegPositionCriteria,

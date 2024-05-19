@@ -17,8 +17,6 @@ import ru.itis.rgjudge.dto.ElementResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static javax.swing.JSplitPane.RIGHT;
-
 @RequestMapping("/api/v1/element")
 public interface ElementEvaluationApi {
 

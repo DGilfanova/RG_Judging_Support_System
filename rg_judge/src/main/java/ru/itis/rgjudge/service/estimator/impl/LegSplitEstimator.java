@@ -38,7 +38,6 @@ import static ru.itis.rgjudge.dto.enums.BodyPart.RIGHT_ANKLE;
 import static ru.itis.rgjudge.dto.enums.BodyPart.RIGHT_HIP;
 import static ru.itis.rgjudge.dto.enums.BodyPart.RIGHT_KNEE;
 import static ru.itis.rgjudge.utils.Constant.DECIMAL_FORMAT;
-import static ru.itis.rgjudge.utils.Constant.DEGREES_180;
 import static ru.itis.rgjudge.utils.Constant.DEGREES_270;
 import static ru.itis.rgjudge.utils.Constant.DEGREES_360;
 import static ru.itis.rgjudge.utils.Constant.NO_PENALTY;

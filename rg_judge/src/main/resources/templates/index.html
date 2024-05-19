@@ -36,6 +36,10 @@
             border-color: rgba(52, 58, 64, 0.8);
             color: #fff;
         }
+        .dropdown-own {
+            max-height: 300px; /* Задайте максимальную высоту в пикселях */
+            overflow-y: auto; /* Добавьте прокрутку, если содержимое превышает максимальную высоту */
+        }
     </style>
 </head>
 <body>
@@ -51,7 +55,7 @@
             Выберите элемент
         </a>
 
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <ul class="dropdown-menu dropdown-own scrollable" aria-labelledby="dropdownMenuLink">
             <!--                    Здесь будут элементы-->
         </ul>
 

@@ -22,13 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.itis.rgjudge.db.enums.BodyPositionType.OPEN;
+import static ru.itis.rgjudge.db.enums.TypeByExecution.STATIC_STANDING;
 import static ru.itis.rgjudge.dto.enums.BodyPart.LEFT_FOOT_INDEX;
 import static ru.itis.rgjudge.dto.enums.BodyPart.LEFT_HEEL;
 import static ru.itis.rgjudge.dto.enums.BodyPart.RIGHT_FOOT_INDEX;
 import static ru.itis.rgjudge.dto.enums.BodyPart.RIGHT_HEEL;
 import static ru.itis.rgjudge.utils.Constant.DECIMAL_FORMAT;
 import static ru.itis.rgjudge.utils.Constant.DEGREES_180;
-import static ru.itis.rgjudge.utils.Constant.DEGREE_ACCURACY;
 import static ru.itis.rgjudge.utils.Constant.NO_PENALTY;
 import static ru.itis.rgjudge.utils.CoordinateUtils.calculate3DAngle;
 import static ru.itis.rgjudge.utils.CoordinateUtils.checkNotDataEmission;
@@ -52,8 +52,7 @@ public class ReleveEstimator implements Estimator {
 
     @Override
     public boolean isApplicableToElement(Element element) {
-        // UPD: после добавления прыжков: если равновесие и не сидячее
-        return true;
+        return STATIC_STANDING.equals(element.typeByExecution());
     }
 
     @Override

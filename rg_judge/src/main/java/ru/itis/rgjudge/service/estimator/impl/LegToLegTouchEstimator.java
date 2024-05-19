@@ -99,7 +99,7 @@ public class LegToLegTouchEstimator implements Estimator {
     }
 
     private ReportData prepareReportData(Boolean isCorrect, Double minDistance, ArrayList<DetectionQualityState> detectionQualityList, boolean isControversialSituation) {
-        var detectionQuality = getDetectionQualityInPercentage(detectionQualityList);
+        double detectionQuality = getDetectionQualityInPercentage(detectionQualityList);
         if (isControversialSituation) {
             detectionQuality *= CONTROVERSIAL_SITUATION_PROBABILITY_ACCURACY;
         }

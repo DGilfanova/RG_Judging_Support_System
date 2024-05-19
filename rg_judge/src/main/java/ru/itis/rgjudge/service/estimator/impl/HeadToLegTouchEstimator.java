@@ -189,7 +189,7 @@ public class HeadToLegTouchEstimator implements Estimator {
                 );
         }
 
-        var detectionQuality = getDetectionQualityInPercentage(detectionQualityList);
+        double detectionQuality = getDetectionQualityInPercentage(detectionQualityList);
         if (isControversialSituation) {
             detectionQuality *= CONTROVERSIAL_SITUATION_PROBABILITY_ACCURACY;
         }
