@@ -125,7 +125,7 @@ public class CoordinateUtils {
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
-    // Расстояние от точки c3 до прямой (c1;c2)
+    // Расстояние от точки c3 до прямой (c1;c2) (x2) * (y1 ) - (x1) * (y2)
     public static double calculateDistanceFromPointToLine(Coordinate c1, Coordinate c2, Coordinate c3) {
         return Math.abs((c2.getY() - c1.getY()) * c3.getX() - (c2.getX() - c1.getX()) * c3.getY() + c2.getX() * c1.getY() - c2.getY() * c1.getX())
                 / Math.sqrt(Math.pow(c2.getY() - c1.getY(), 2) + Math.pow(c2.getX() - c1.getX(), 2));

@@ -38,9 +38,9 @@ public class ElementRepositoryImpl implements ElementRepository {
                llpc.estimation_type as left_leg_estimation_type,
                rlpc.position_type as right_leg_position_type,
                rlpc.estimation_type as right_leg_estimation_type,
-               hltc.type as hltc_type,
+               hltc.posture_type as hltc_type,
                hltc.is_touch as hltc_is_touch,
-               hdltc.type as hdltc_type,
+               hdltc.posture_type as hdltc_type,
                hdltc.is_touch as hdltc_is_touch,
                lltc.is_touch as lltc_is_touch
         FROM element e

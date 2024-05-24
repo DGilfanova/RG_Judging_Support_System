@@ -17,6 +17,7 @@ public class Constant {
     public static final double ANGLE_ACCURACY = 3;
     public static final double DEGREE_ACCURACY = 20.0;
     public static final double CONTROVERSIAL_SITUATION_PROBABILITY_ACCURACY = 0.5;
+    public static final double MIN_GOOD_DETECTION_PROBABILITY = 0.9;
 
     // Score
     public static final double ZERO_SCORE = 0.0;
@@ -33,5 +34,4 @@ public class Constant {
     public static final String INVALID_VIDEO_FPS_ERROR = "Fps видео = %s, минимальное разрешенное = %s. Пожалуйста, загрузите видео более высокого качества.";
     // EN: Gymnast wasn't detected on the video. Please upload higher quality video
     public static final String UNDETECTED_HUMAN_ERROR = "Спортсмен не был обнаружен на видео. Пожалуйста, загрузите видео более высокого качества.";
-    public static final String BAD_DETECTION_QUALITY_ERROR = "Пожалуйста, загрузите видео более высокого качества. Спортсмен был обнаружен частично";
 }

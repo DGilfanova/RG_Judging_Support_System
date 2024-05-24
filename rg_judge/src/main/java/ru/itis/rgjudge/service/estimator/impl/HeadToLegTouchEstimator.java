@@ -33,6 +33,7 @@ import static ru.itis.rgjudge.dto.enums.BodyPart.getHip;
 import static ru.itis.rgjudge.dto.enums.BodyPart.getKnee;
 import static ru.itis.rgjudge.utils.Constant.CONTROVERSIAL_SITUATION_PROBABILITY_ACCURACY;
 import static ru.itis.rgjudge.utils.Constant.DECIMAL_FORMAT;
+import static ru.itis.rgjudge.utils.Constant.MIN_GOOD_DETECTION_PROBABILITY;
 import static ru.itis.rgjudge.utils.Constant.NO_PENALTY;
 import static ru.itis.rgjudge.utils.CoordinateUtils.calculate3DDistance;
 import static ru.itis.rgjudge.utils.CoordinateUtils.calculateAverage;
@@ -190,7 +191,7 @@ public class HeadToLegTouchEstimator implements Estimator {
         }
 
         double detectionQuality = getDetectionQualityInPercentage(detectionQualityList);
-        if (isControversialSituation) {
+        if (isControversialSituation && detectionQuality < MIN_GOOD_DETECTION_PROBABILITY) {
             detectionQuality *= CONTROVERSIAL_SITUATION_PROBABILITY_ACCURACY;
         }
 

@@ -25,6 +25,7 @@ import static ru.itis.rgjudge.dto.enums.BodyPart.getKnee;
 import static ru.itis.rgjudge.utils.Constant.DECIMAL_FORMAT;
 import static ru.itis.rgjudge.utils.Constant.DEGREES_180;
 import static ru.itis.rgjudge.utils.Constant.DEGREES_90;
+import static ru.itis.rgjudge.utils.Constant.MIN_GOOD_DETECTION_PROBABILITY;
 import static ru.itis.rgjudge.utils.Constant.NO_PENALTY;
 import static ru.itis.rgjudge.utils.Constant.CONTROVERSIAL_SITUATION_PROBABILITY_ACCURACY;
 import static ru.itis.rgjudge.utils.CoordinateUtils.calculateAngle;
@@ -32,7 +33,7 @@ import static ru.itis.rgjudge.utils.CoordinateUtils.getCoordinate;
 import static ru.itis.rgjudge.utils.CoordinateUtils.isCoordinateInFrame;
 import static ru.itis.rgjudge.utils.DetectionQualityUtils.getDetectionQualityInPercentage;
 
-public class BaseLegPositionEstimator {
+public abstract class BaseLegPositionEstimator {
 
     private static final double MAX_DEGREE_ACCURACY = 19.0;
     private static final double DEGREE_ACCURACY = 5.0;
@@ -171,13 +172,13 @@ public class BaseLegPositionEstimator {
             case STRAIGHT -> report.expectedBehavior("Нога находится в прямом положении (угол в колене близок к 180°)")
                 .actualBehavior(
                     isValid && penalty == NO_PENALTY
-                        ? "Нога вытянута"
+                        ? "Нога находится в прямом положении"
                         : "Нога согнута, угол в колене = %d°".formatted(Math.round(errorAngle))
                 );
         }
 
         double detectionQuality = getDetectionQualityInPercentage(detectionQualityList);
-        if (isControversialSituation) {
+        if (isControversialSituation && detectionQuality < MIN_GOOD_DETECTION_PROBABILITY) {
             detectionQuality *= CONTROVERSIAL_SITUATION_PROBABILITY_ACCURACY;
         }
 

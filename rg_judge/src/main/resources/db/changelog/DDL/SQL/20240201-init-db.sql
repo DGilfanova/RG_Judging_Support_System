@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS element
 
 CREATE TABLE IF NOT EXISTS leg_split_criteria
 (
-    element_id INT UNIQUE,
+    element_id INT PRIMARY KEY,
     min_degree REAL CHECK ( min_degree >= 0 AND min_degree <= 360 ),
     max_degree REAL CHECK ( min_degree >= 0 AND min_degree <= 360 ),
     added_at   TIMESTAMP DEFAULT now(),
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS leg_split_criteria
 
 CREATE TABLE IF NOT EXISTS body_posture_criteria
 (
-    element_id INT UNIQUE,
+    element_id INT PRIMARY KEY,
     min_degree REAL CHECK ( min_degree >= 0 AND min_degree <= 360 ),
     max_degree REAL CHECK ( min_degree >= 0 AND min_degree <= 360 ),
     added_at   TIMESTAMP DEFAULT now(),
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS releve_criteria
 CREATE TABLE IF NOT EXISTS hand_to_leg_touch_criteria
 (
     element_id INT PRIMARY KEY,
-    type       VARCHAR(30),
+    posture_type       VARCHAR(30),
     is_touch   BOOLEAN,
     added_at   TIMESTAMP DEFAULT now(),
     FOREIGN KEY (element_id) REFERENCES element (id)
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS hand_to_leg_touch_criteria
 CREATE TABLE IF NOT EXISTS head_to_leg_touch_criteria
 (
     element_id INT PRIMARY KEY,
-    type       VARCHAR(30),
+    posture_type       VARCHAR(30),
     is_touch   BOOLEAN,
     added_at   TIMESTAMP DEFAULT now(),
     FOREIGN KEY (element_id) REFERENCES element (id)

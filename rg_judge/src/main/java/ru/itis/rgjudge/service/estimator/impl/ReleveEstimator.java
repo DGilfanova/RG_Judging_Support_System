@@ -145,8 +145,7 @@ public class ReleveEstimator implements Estimator {
     private ReportData prepareReportData(Boolean isValid, Boolean isReleveRegistered, Double penalty, Double maxAngle, Double duration, ArrayList<DetectionQualityState> detectionQualityList) {
         var report = ReportData.builder()
             .isCounted(Boolean.TRUE.toString())
-            .expectedBehavior("Длительность фиксации в релеве = %s сек"
-                .formatted(DECIMAL_FORMAT.format(rulesProperties.balanceFixationDuration())))
+            .expectedBehavior("Элемент выполнен с релеве")
             .estimatorName("Оценка релеве");
 
         if (isReleveRegistered) {

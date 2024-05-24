@@ -92,7 +92,7 @@ VALUES (2, 170, 190),
 ON CONFLICT DO NOTHING;
 
 
-INSERT INTO hand_to_leg_touch_criteria(element_id, type, is_touch)
+INSERT INTO hand_to_leg_touch_criteria(element_id, posture_type, is_touch)
 VALUES (5, 'LOW_POSTURE', false),
        (17, 'HIGH_POSTURE', false),
        (6, 'LOW_POSTURE', true),
@@ -139,7 +139,7 @@ VALUES (2, 'LEFT', 'STRAIGHT', 'ONLY_PENALTY'),
 ON CONFLICT DO NOTHING;
 
 
-INSERT INTO head_to_leg_touch_criteria(element_id, type, is_touch)
+INSERT INTO head_to_leg_touch_criteria(element_id, posture_type, is_touch)
 VALUES (9, 'SHALLOW_POSTURE', true),
        (16, 'DEEP_POSTURE', true),
        (18, 'DEEP_POSTURE', true),

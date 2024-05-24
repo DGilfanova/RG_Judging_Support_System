@@ -14,7 +14,6 @@ import ru.itis.rgjudge.dto.DefaultResponseDto;
 import ru.itis.rgjudge.dto.ElementReport;
 import ru.itis.rgjudge.dto.ElementResponse;
 
-import java.io.IOException;
 import java.util.List;
 
 @RequestMapping("/api/v1/element")
@@ -31,6 +30,6 @@ public interface ElementEvaluationApi {
     DefaultResponseDto<ElementReport> evaluateElement(
             @Parameter(description = "ID элемента") @RequestParam("elementId") Integer elementId,
             @Parameter(description = "Видео элемента (не более 10Мб)") @RequestParam("videoFile") MultipartFile videoFile,
-            @Parameter(description = "ID элемента") @RequestParam(value = "handed", defaultValue = "RIGHT") Side handed
-    ) throws IOException;
+            @Parameter(description = "Правша/левша") @RequestParam(value = "handed", defaultValue = "RIGHT") Side handed
+    );
 }

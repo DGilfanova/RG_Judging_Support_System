@@ -106,7 +106,7 @@ public class BodyPostureEstimator implements Estimator {
                 if (start > 0) wasFixed = true;
             }
         }
-        logger.info("Element execution start frame = " + start + ", end frame = " + end);
+        logger.info("Element execution start frame = {}, end frame = {}", start, end);
         var duration = poseData.get(end).getTime() - poseData.get(start).getTime();
 
         // Элемент засчитан, если длительность фиксации положения тела не менее необходимого
